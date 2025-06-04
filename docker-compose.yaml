@@ -29,17 +29,16 @@ services:
     depends_on:
       - postgres
 
-  # resto_front:
-  #   image: sveltekit-app:latest
-  #   build:
-  #     context: ./restoview
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "5173:5173"
-  #   networks:
-  #     - resto_bridge
-  #   env_file:
-  #     - .env
+  resto_front:
+    build:
+      context: ./restoview
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    networks:
+      - resto_bridge
+    env_file:
+      - .env
 
   resto_backend:
     image: rust:latest

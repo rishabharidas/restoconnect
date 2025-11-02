@@ -1,21 +1,24 @@
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:18
     env_file:
       - .env
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST_AUTH_METHOD: trust
+      # REMOVE THIS LINE:
+      # POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
-      - ./data:/var/lib/postgresql/data
+      # CHANGE THE MOUNT POINT HERE:
+      - postgres_data_volume:/var/lib/postgresql
     ports:
       - "5432:5432"
     networks:
       - resto_bridge
 
   pgadmin:
+    # We use 'latest' here, trusting it will contain a client >= PostgreSQL 18.
     image: dpage/pgadmin4:latest
     env_file:
       - .env
@@ -29,36 +32,31 @@ services:
     depends_on:
       - postgres
 
-  resto_front:
-    build:
-      context: ./restoview
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    networks:
-      - resto_bridge
-    env_file:
-      - .env
+  # Other services (uncommented for completeness)
+  # resto_front:
+  #   build:
+  #     context: ./restoview
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - resto_bridge
+  #   env_file:
+  #     - .env
 
-  resto_backend:
-    build:
-      context: ./restolink
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    networks:
-      - resto_bridge
-    env_file:
-      - .env
+  # resto_backend:
+  #   build:
+  #     context: ./restolink
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - resto_bridge
+  #   env_file:
+  #     - .env
 
 volumes:
-  postgres_data:
-    driver: local
-    name: postgres_data_volume
-    driver_opts:
-      type: none
-      o: bind
-      device: /var/lib/postgresql/data
+  postgres_data_volume:
 
 networks:
   resto_bridge:

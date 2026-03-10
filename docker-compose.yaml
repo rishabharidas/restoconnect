@@ -17,6 +17,14 @@ services:
     networks:
       - resto_bridge
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - resto_bridge
+
+
   pgadmin:
     # We use 'latest' here, trusting it will contain a client >= PostgreSQL 18.
     image: dpage/pgadmin4:latest
@@ -54,6 +62,12 @@ services:
   #     - resto_bridge
   #   env_file:
   #     - .env
+  #   environment:
+  #     # Compose will substitute these from the top-level .env (or your shell).
+  #     # The hostname "postgres" is the service name and resolves on the docker network.
+  #     DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}"
+  #   depends_on:
+  #     - postgres
 
 volumes:
   postgres_data_volume:

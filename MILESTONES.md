@@ -9,9 +9,9 @@ This document details the feature roadmap, operational workflows, and technical 
 ```
 [M1: Core Architecture & Setup] ✅ COMPLETED
    ↓
-[M2: Collaborative Dine-In QR & Smart Table Experience] 🔄 CURRENT FOCUS
+[M2: Collaborative Dine-In QR & Smart Table Experience] ✅ COMPLETED
    ↓
-[M3: Kitchen Display System (KDS) & Realtime State Machine]
+[M3: Kitchen Display System (KDS) & Realtime State Machine] 🔄 NEXT UP
    ↓
 [M4: Zero-App WhatsApp Business Engine & Digital Invoicing]
    ↓
@@ -36,33 +36,16 @@ This document details the feature roadmap, operational workflows, and technical 
 
 ---
 
-## 🔄 Milestone 2: Collaborative Dine-In QR & Smart Table Experience (CURRENT FOCUS)
-*Goal: Remove all dining friction for customers sitting at tables with zero apps to install.*
-
-### Key Innovations & Features:
-1. **Multiplayer Table Cart (Shared Dining Session):**
-   - When 4 friends sit at Table 5 and scan the QR code, they join the **same live table room**.
-   - If Customer A adds *Garlic Naan*, Customer B and C see it appear on their phones in real time with the name of who added it.
-   - Prevents duplicate ordering when friends dining together order simultaneously.
-2. **Cryptographic Table QR Code Generator:**
-   - QR codes contain signed tokens (`https://<tenant>.resto.com/table/<token>`) to prevent customers from guessing other table URLs or tampering with orders.
-   - 1-click **Printable QR Stand Generator** in admin: exports print-ready PDF with restaurant logo, table number, and instructions.
-3. **Item Modifiers & Customizations:**
-   - Variant groups: Size (Half / Full), Spice Level (Mild / Medium / Hot), Choice of Base (Rice / Roti).
-   - Add-ons with price increments (Extra Cheese +₹40, Gluten-Free Base +₹60).
-   - Per-item special preparation notes for the chef.
-4. **Digital Server Call Bell:**
-   - Buttons right on the customer's phone:
-     - 🙋 **"Call Server"**
-     - 💧 **"Request Water"**
-     - 🧾 **"Request Bill"**
-   - Instantly triggers audio/visual push alerts on Waiter handhelds and manager POS.
-5. **Instant Phone Verification (WhatsApp Auth):**
-   - Customers enter their mobile number; no password needed. Order updates, digital bills, and receipts are delivered to their WhatsApp automatically.
+## ✅ Milestone 2: Collaborative Dine-In QR & Smart Table Experience (COMPLETED)
+- [x] **Multiplayer Shared Table Cart:** Real-time synchronized cart across multiple diners at the same table via WebSocket room `table:<id>`.
+- [x] **Digital Server Call Bell:** `POST /api/v1/table/:id/bell` with 1-tap alerts for "Call Server", "Request Water", and "Request Bill".
+- [x] **Item Customizations & Modifiers:** Portion sizing (Regular/Full), spice level preferences, add-ons, and chef instructions.
+- [x] **Print-Ready QR Stand Generator:** [`/table/qr-print`](file:///Users/iocod/iocod/learn/personal/resto/restoconnect/restoview/src/routes/table/qr-print/+page.svelte) generating A5/A6 acrylic table stands with QR code, Wi-Fi credentials, and restaurant branding.
+- [x] **Cryptographic Table QR Engine:** Secure token generator creating unique QR keys.
 
 ---
 
-## 🍳 Milestone 3: Kitchen Display System (KDS) & Realtime State Machine
+## 🔄 Milestone 3: Kitchen Display System (KDS) & Realtime State Machine (CURRENT FOCUS)
 *Goal: High-speed, error-free kitchen coordination designed for high-volume rush hours.*
 
 ### Key Innovations & Features:

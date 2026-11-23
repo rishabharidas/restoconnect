@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS restoapp.tenants (
     email VARCHAR(255) NOT NULL,
     address TEXT NOT NULL,
     branding JSONB NOT NULL DEFAULT '{
-        "primary_color": "#2563eb",
-        "secondary_color": "#1e293b",
+        "primary_color": "#27272a",
+        "secondary_color": "#18181b",
         "font_family": "Inter",
         "logo_url": null,
         "hero_banner_url": null
@@ -235,8 +235,8 @@ INSERT INTO restoapp.tenants (id, slug, name, phone, email, address, branding, s
     'contact@testrestaurant.com',
     '123 Main Food Street, City Center',
     '{
-        "primary_color": "#2563eb",
-        "secondary_color": "#1e293b",
+        "primary_color": "#27272a",
+        "secondary_color": "#18181b",
         "accent_color": "#f59e0b",
         "font_family": "Inter",
         "logo_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop&q=80"

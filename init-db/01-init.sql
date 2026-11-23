@@ -251,7 +251,7 @@ INSERT INTO restoapp.tenants (id, slug, name, phone, email, address, branding, s
         "enable_takeaway": true,
         "whatsapp_notifications": true
     }'::jsonb
-) ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, branding = EXCLUDED.branding;
+) ON CONFLICT (id) DO UPDATE SET slug = EXCLUDED.slug, name = EXCLUDED.name, branding = EXCLUDED.branding;
 
 INSERT INTO restoapp.outlets (id, tenant_id, name, phone, address, latitude, longitude) VALUES
 (

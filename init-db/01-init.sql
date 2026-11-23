@@ -229,15 +229,15 @@ CREATE TABLE IF NOT EXISTS restoapp.driver_location_logs (
 INSERT INTO restoapp.tenants (id, slug, name, phone, email, address, branding, settings) VALUES
 (
     'a0000000-0000-0000-0000-000000000001',
-    'royal-spice',
-    'The Royal Spice Restaurant',
+    'test-resto',
+    'Test Restaurant',
     '+919876543210',
-    'contact@royalspice.com',
-    '123 MG Road, Bangalore, India',
+    'contact@testrestaurant.com',
+    '123 Main Food Street, City Center',
     '{
-        "primary_color": "#e11d48",
+        "primary_color": "#2563eb",
         "secondary_color": "#1e293b",
-        "accent_color": "#fbbf24",
+        "accent_color": "#f59e0b",
         "font_family": "Inter",
         "logo_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop&q=80"
     }'::jsonb,
@@ -251,24 +251,24 @@ INSERT INTO restoapp.tenants (id, slug, name, phone, email, address, branding, s
         "enable_takeaway": true,
         "whatsapp_notifications": true
     }'::jsonb
-) ON CONFLICT (slug) DO NOTHING;
+) ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name, branding = EXCLUDED.branding;
 
 INSERT INTO restoapp.outlets (id, tenant_id, name, phone, address, latitude, longitude) VALUES
 (
     'b0000000-0000-0000-0000-000000000001',
     'a0000000-0000-0000-0000-000000000001',
-    'Indiranagar Outlet',
+    'Main Test Branch',
     '+919876543210',
-    '100 Feet Road, Indiranagar, Bangalore',
+    '123 Main Food Street, City Center',
     12.9716,
     77.5946
 ) ON CONFLICT DO NOTHING;
 
--- Demo Tables for Indiranagar Outlet
+-- Demo Tables for Main Test Branch
 INSERT INTO restoapp.restaurant_tables (tenant_id, outlet_id, table_number, qr_code_token, capacity) VALUES
-('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 'T-01', 'qr_token_table_1_royal_spice', 4),
-('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 'T-02', 'qr_token_table_2_royal_spice', 2),
-('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 'T-03', 'qr_token_table_3_royal_spice', 6)
+('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 'T-01', 'qr_token_table_1_test_resto', 4),
+('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 'T-02', 'qr_token_table_2_test_resto', 2),
+('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 'T-03', 'qr_token_table_3_test_resto', 6)
 ON CONFLICT (qr_code_token) DO NOTHING;
 
 -- Demo Menu Category & Items

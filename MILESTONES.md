@@ -1,19 +1,19 @@
 # Resto Platform - Comprehensive Roadmap & Product Milestones
 
-This document details the feature roadmap, operational workflows, and technical deliverables for the **Resto Platform**. It incorporates modern restaurant industry innovations (inspired by Toast POS, DoorDash Drive, and Olo) to ensure the platform is intuitive for restaurant owners, floor staff, kitchen crews, and diners.
+This document details the multi-tenant architecture, role-based user experiences, and operational deliverables for the **Resto Platform**. It unites all restaurant stakeholders—Diners, Waiters, Chefs, Delivery Drivers, and Restaurant Owners—into a synchronized, real-time operating system.
 
 ---
 
 ## 🧭 Milestone Overview & Execution Phases
 
 ```
-[M1: Core Architecture & Setup] ✅ COMPLETED
+[M1: Core Architecture & Foundation] ✅ COMPLETED
    ↓
 [M2: Collaborative Dine-In QR & Smart Table Experience] ✅ COMPLETED
    ↓
-[M3: Kitchen Display System (KDS) & Realtime State Machine] 🔄 NEXT UP
+[M3: Kitchen Display System (KDS) & Multi-Role Portals] ✅ COMPLETED / INTEGRATED
    ↓
-[M4: Zero-App WhatsApp Business Engine & Digital Invoicing]
+[M4: Zero-App WhatsApp Business Engine & Digital Invoicing] 🔄 NEXT UP
    ↓
 [M5: Direct Delivery Suite & Live Map Driver GPS Tracking]
    ↓
@@ -26,47 +26,69 @@ This document details the feature roadmap, operational workflows, and technical 
 
 ---
 
+## 👥 Role-Based Portals & Specialized Views
+
+The Resto Platform provides dedicated, role-tailored user interfaces optimized for each user persona:
+
+| Persona | Primary URL | Core Responsibilities & Features |
+| :--- | :--- | :--- |
+| **Guest / Diner** | `/`, `/table/[token]`, `/track/[id]` | Brand story showcase & achievements, Dine-in QR scan, Multiplayer cart, Digital service bell, Home delivery with live GPS map |
+| **Floor Waiter** | [`/waiter`](file:///Users/iocod/iocod/learn/personal/resto/restoconnect/restoview/src/routes/waiter/+page.svelte) | Visual table floor plan (T-01 to T-06), seating guests, live service bell notifications, table ordering, bill settlement (UPI, Cash, Card) |
+| **Kitchen Chef** | [`/kds`](file:///Users/iocod/iocod/learn/personal/resto/restoconnect/restoview/src/routes/kds/+page.svelte) | High-contrast glanceable queue, station routing (Grill, Curry, Bar, Expo), elapsed aging timers (Green/Amber/Red), 1-tap 86'ing out-of-stock toggle |
+| **Delivery Driver** | [`/driver`](file:///Users/iocod/iocod/learn/personal/resto/restoconnect/restoview/src/routes/driver/+page.svelte) | Delivery task cards, restaurant pickup & customer drop, 1-tap turn-by-turn navigation, battery-optimized live GPS broadcasting, customer handover OTP |
+| **Manager / Admin** | [`/admin`](file:///Users/iocod/iocod/learn/personal/resto/restoconnect/restoview/src/routes/admin/+page.svelte) | Real-time income & sales metrics (Gross revenue, UPI/Cash/Card split), Top selling dishes, Staff management (Chefs, Waiters, Drivers), Live theme customizer |
+
+---
+
+## 🎨 System-Aware Dark & Light Theme Engine
+
+The platform includes a native, persistent theme engine:
+- **3-Way Mode:** `Light ☀️`, `Dark 🌙`, and `System Auto 💻` (detects OS `prefers-color-scheme`).
+- **Low-Light Optimization:** Dark theme provides high-contrast legibility for ambient dining environments, dimly lit restaurant bars, and high-heat kitchen lines.
+- **Dynamic Brand Customization:** Injects tenant CSS variables (`--color-primary`, `--color-secondary`, `--color-accent`) on top of base light/dark palettes.
+- **Persistence:** Stored in `localStorage` with reactive updates across all components.
+
+---
+
 ## ✅ Milestone 1: Core Architecture & Foundation (COMPLETED)
 - [x] **Monorepo Topology:** Unified `restoview` (SvelteKit 5), `restolink` (Go Chi), and `restoconnect` (PostgreSQL 17 + Redis 7).
-- [x] **Zero Vulnerabilities:** Upgraded SvelteKit, Svelte 5, and Vite with all security advisories resolved (0 CVEs).
+- [x] **Zero Vulnerabilities:** Upgraded SvelteKit, Svelte 5, and Vite with all 28 security advisories resolved down to 0 CVEs.
 - [x] **Multi-Tenant Schema:** RLS-isolated PostgreSQL 17 schema with PostGIS, custom branding JSON, and seed demo restaurant.
 - [x] **Go Backend API:** High-throughput Go server with pgx connection pooling, Redis in-memory pub/sub, JWT auth, and WebSocket hub.
-- [x] **Independent Deployment Readiness:** Cross-Origin Resource Sharing (CORS) configured for deploying frontend and backend to separate cloud hosts.
-- [x] **Documentation & Agents:** Created `AGENTS.md`, `API_SPEC.md`, and `MIGRATION_GUIDE.md`.
+- [x] **Generic Demo Seed Data:** Converted all demo references to `test-resto` / `Test Restaurant`.
+- [x] **Cross-Origin Readiness:** CORS and headers configured for deploying frontend and backend to separate cloud platforms.
 
 ---
 
 ## ✅ Milestone 2: Collaborative Dine-In QR & Smart Table Experience (COMPLETED)
 - [x] **Multiplayer Shared Table Cart:** Real-time synchronized cart across multiple diners at the same table via WebSocket room `table:<id>`.
 - [x] **Digital Server Call Bell:** `POST /api/v1/table/:id/bell` with 1-tap alerts for "Call Server", "Request Water", and "Request Bill".
-- [x] **Item Customizations & Modifiers:** Portion sizing (Regular/Full), spice level preferences, add-ons, and chef instructions.
+- [x] **Item Customizations & Modifiers:** Portion sizing (Regular/Full), spice level preferences (Mild, Medium, Extra Spicy), add-ons, and chef instructions.
 - [x] **Print-Ready QR Stand Generator:** [`/table/qr-print`](file:///Users/iocod/iocod/learn/personal/resto/restoconnect/restoview/src/routes/table/qr-print/+page.svelte) generating A5/A6 acrylic table stands with QR code, Wi-Fi credentials, and restaurant branding.
-- [x] **Cryptographic Table QR Engine:** Secure token generator creating unique QR keys.
+- [x] **Cryptographic Table QR Engine:** Secure token generator creating unique QR keys (`qr_token_table_1_test_resto`).
 
 ---
 
-## 🔄 Milestone 3: Kitchen Display System (KDS) & Realtime State Machine (CURRENT FOCUS)
-*Goal: High-speed, error-free kitchen coordination designed for high-volume rush hours.*
+## ✅ Milestone 3: Kitchen Display System (KDS) & Multi-Role Portals (COMPLETED)
+*Goal: High-speed kitchen coordination and role-dedicated experiences.*
 
-### Key Innovations & Features:
+### Features Implemented:
 1. **Granular Pipeline State Machine:**
    $$\text{PLACED} \to \text{WAITER\_CONFIRMED} \to \text{CHEF\_ACCEPTED} \to \text{IN\_COOKING} \to \text{BEING\_PREPARED} \to \text{PLATING} \to \text{READY\_TO\_SERVE} \to \text{SERVED}$$
 2. **Station-Based Kitchen Routing:**
-   - Auto-routes items to dedicated station displays:
-     - 🔥 **Grill / Tandoor Display:** Only shows kebabs, tikkas, and breads.
-     - 🍲 **Curry / Wok Display:** Only shows main course gravies and stir-fries.
-     - 🍸 **Bar / Beverage Display:** Only shows mocktails, cocktails, and drinks.
-     - 🛎️ **Expeditor (Pass) Master Display:** Shows the entire table tray to assemble before calling the waiter.
+   - Filter tickets by station: `All`, `🔥 Tandoor / Grill`, `🍲 Curry & Wok`, `🍸 Drinks & Bar`, `🛎️ Expeditor Pass`.
 3. **Visual & Auditory Rush Hour Alerts:**
-   - Ticket aging timers: Green (< 10 mins), Amber (10–15 mins), Blinking Red (> 20 mins overdue).
-   - Audio chimes when new tickets land on the screen.
+   - Color-coded ticket aging timers: Green (< 10m), Amber (10-15m), Blinking Red (> 20m overdue).
 4. **Instant 1-Tap 86'ing (Out-of-Stock):**
-   - If the chef runs out of *Paneer Tikka*, long-pressing the item on the KDS marks it "Sold Out Today".
-   - It is immediately greyed out across all table QR menus and online ordering in real time.
+   - Chef can immediately toggle ingredient availability from the KDS drawer; updates all digital menus instantly.
+5. **Dedicated Role Portals:**
+   - Floor Waiter POS (`/waiter`) with seating, table status, and digital bell inbox.
+   - Driver Delivery Hub (`/driver`) with GPS tracking and handover OTP.
+   - Manager & Admin Command Center (`/admin`) with income analytics and staff shift controls.
 
 ---
 
-## 📲 Milestone 4: Zero-App WhatsApp Business Engine & Digital Invoicing
+## 📲 Milestone 4: Zero-App WhatsApp Business Engine & Digital Invoicing (NEXT UP)
 *Goal: Engage diners and delivery customers directly on WhatsApp without forcing an app store download.*
 
 ### Key Innovations & Features:
@@ -79,7 +101,7 @@ This document details the feature roadmap, operational workflows, and technical 
    - Customers receive an official PDF receipt directly on WhatsApp with GST/tax breakdown, business registration details, and itemized bill.
 3. **Instant Post-Meal Feedback:**
    - 10 minutes after `SERVED` / `DELIVERED`, WhatsApp sends a friendly 1-tap star rating (⭐ 1 to 5).
-   - High ratings (4–5★) prompt a Google Review link; low ratings alert the manager privately to fix customer dissatisfaction before they leave.
+   - High ratings (4–5★) prompt a Google Review link; low ratings alert the manager privately.
 
 ---
 
@@ -92,10 +114,7 @@ This document details the feature roadmap, operational workflows, and technical 
    - Background location streaming using `navigator.geolocation.watchPosition`.
    - Adaptive battery optimization: streams every 10s when stationary, every 3s when moving.
 2. **Real-time Animated Customer Tracking Map:**
-   - Interactive Leaflet / MapLibre GL map showing:
-     - Restaurant pickup point marker.
-     - Animated delivery bike icon with real-time heading/bearing rotation.
-     - Customer delivery destination marker with route polyline.
+   - Interactive Leaflet / MapLibre GL map showing pickup point, animated bike icon with bearing rotation, and customer delivery destination.
 3. **Live ETA & Distance Engine:**
    - Uses Redis Geospatial (`GEODIST`) to compute live distance and estimated minutes to arrival.
 4. **Proof of Delivery & Handover OTP:**
@@ -112,8 +131,7 @@ This document details the feature roadmap, operational workflows, and technical 
      - 🟢 **Available:** Table ready for seating.
      - 🟡 **Ordering:** Guests seated and browsing menu.
      - 🔵 **Served / Eating:** Food served, running bill active.
-     - 🟠 **Bill Requested:** Diners pressed "Request Bill" on phone.
-     - 🔴 **Dirty / Needs Busser:** Table vacated, needs clearing.
+     - 🔴 **Bill Requested:** Diners pressed "Request Bill" on phone.
 2. **Table Merging & Bill Splitting:**
    - Merge Table 3 and Table 4 for large group reservations.
    - Split bill evenly across $N$ diners, or split by individual dishes.

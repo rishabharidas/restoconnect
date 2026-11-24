@@ -20,7 +20,7 @@ restoconnect/
 | Service | Path | Role | Primary Tech Stack |
 | :--- | :--- | :--- | :--- |
 | **Frontend** | [`./restoview`](./restoview) | Customer QR PWA, Waiter POS, Chef KDS, Driver Tracker, Admin Portal | SvelteKit 5, Tailwind v4, Flowbite, TypeScript |
-| **Backend API**| [`./restolink`](./restolink) | REST API, WebSocket/SSE Realtime hub, Order State Machine, Location Ingestion | Node.js (Fastify + TypeScript) or Go |
+| **Backend API**| [`./restolink`](./restolink) | REST API, WebSocket/SSE Realtime hub, Order State Machine, Location Ingestion | Go 1.23 (Chi + pgx/v5 + Redis) [ADR 001] |
 | **Infrastructure**| Root | Docker compose services, Postgres & Redis configuration | Docker Compose, PostgreSQL 17, Redis 7 |
 
 ---
